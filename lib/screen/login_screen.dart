@@ -10,6 +10,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   height: 330,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                    padding: const EdgeInsets.fromLTRB(0, 100, 0, 10),
                     child: Column(
                       children: [
                         const Text(
@@ -51,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                         Opacity(
                           opacity: 0.5,
                           child: SizedBox(
-                              height: 200,
+                              height: 120,
                               child: Image.asset(
                                 'assets/cover/logo.png',
                                 fit: BoxFit.contain,
@@ -108,14 +109,42 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.all(18),
           child: Material(
+            color: Colors.white,
             elevation: 5,
             borderRadius: BorderRadius.circular(35),
             child: MaterialButton(
+              padding: const EdgeInsets.all(10),
+              minWidth: MediaQuery.of(context).size.width * 0.5,
               onPressed: () {},
-              child: const Text("Login",
-                  style: TextStyle(color: Colors.blue, fontSize: 18)),
+              child: const Text(
+                "Login",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
+        ),
+        const SizedBox(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Dont have an account yet?'),
+            const SizedBox(
+              width: 10,
+            ),
+            Material(
+              child: MaterialButton(
+                onPressed: () {},
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
         )
       ],
     );
