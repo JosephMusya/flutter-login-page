@@ -31,20 +31,33 @@ class _LoginPageState extends State<LoginPage> {
               clipper: CustomClipperPath(),
               child: Container(
                   decoration: const BoxDecoration(
-                    color: Colors.blueAccent,
+                    color: Colors.black,
                   ),
                   width: double.infinity,
                   height: 330,
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-                    child: Text(
-                      "Innovators' Club",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Innovators' Club",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          ),
+                        ),
+                        Opacity(
+                          opacity: 0.5,
+                          child: SizedBox(
+                              height: 200,
+                              child: Image.asset(
+                                'assets/cover/logo.png',
+                                fit: BoxFit.contain,
+                              )),
+                        )
+                      ],
                     ),
                   )),
             ),
