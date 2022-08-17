@@ -12,89 +12,128 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-
-          Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(20),
-              image: Image.asset("assets/cover/logo.png"),
-            ),
-            child: Text(
-              "Innovators Club",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          // child: Image.asset(
-          //   "assets/cover/logo.png",
-          //   fit: BoxFit.contain,
-          // ),
-          const SizedBox(height: 70),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(15),
+    return Column(
+      // mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            Opacity(
+              opacity: 0.5,
+              child: ClipPath(
+                clipper: CustomClipperPath(),
+                child: Container(
+                    width: double.infinity,
+                    height: 340,
+                    decoration: const BoxDecoration(color: Colors.blueAccent)),
               ),
-              child: TextFormField(
-                autofocus: false,
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.mail,
-                      color: Colors.white,
+            ),
+            ClipPath(
+              clipper: CustomClipperPath(),
+              child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blueAccent,
+                  ),
+                  width: double.infinity,
+                  height: 330,
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+                    child: Text(
+                      "Innovators' Club",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
                     ),
-                    hintText: 'Email Adress',
-                    border: InputBorder.none),
+                  )),
+            ),
+          ],
+        ),
+        const SizedBox(height: 50),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextFormField(
+              autofocus: false,
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.mail,
+                    color: Colors.white,
+                  ),
+                  hintText: 'Email Adress',
+                  border: InputBorder.none),
+            ),
+          ),
+        ),
+        const SizedBox(),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.blueAccent),
+            child: TextFormField(
+              obscureText: true,
+              controller: _passwordController,
+              keyboardType: TextInputType.visiblePassword,
+              decoration: const InputDecoration(
+                suffixIcon: Icon(Icons.remove_red_eye, color: Colors.white),
+                prefixIcon: Icon(Icons.key, color: Colors.white),
+                border: InputBorder.none,
+                hintText: 'Password',
               ),
             ),
           ),
-          const SizedBox(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.blueAccent),
-              child: TextFormField(
-                obscureText: true,
-                controller: _passwordController,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: const InputDecoration(
-                  suffixIcon: Icon(Icons.remove_red_eye, color: Colors.white),
-                  prefixIcon: Icon(Icons.key, color: Colors.white),
-                  border: InputBorder.none,
-                  hintText: 'Password',
-                ),
-              ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(18),
+          child: Material(
+            elevation: 5,
+            borderRadius: BorderRadius.circular(35),
+            child: MaterialButton(
+              onPressed: () {},
+              child: const Text("Login",
+                  style: TextStyle(color: Colors.blue, fontSize: 18)),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(18),
-            child: Material(
-              elevation: 5,
-              borderRadius: BorderRadius.circular(35),
-              child: MaterialButton(
-                onPressed: () {},
-                child: const Text("Login",
-                    style: TextStyle(color: Colors.blue, fontSize: 18)),
-              ),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
+  }
+}
+
+class CustomClipperPath extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    double x = size.width;
+    double y = size.height;
+    final path = Path();
+    path.lineTo(0, y);
+    var firstPoint = Offset(x / 5, y);
+    var firstEnd = Offset(x / 2.25, y - 50);
+    path.quadraticBezierTo(
+        firstPoint.dx, firstPoint.dy, firstEnd.dx, firstEnd.dy);
+    var secondStart = Offset(x * 0.7, y * 0.7);
+    var secondEnd = Offset(x, y - 50);
+
+    path.quadraticBezierTo(
+        secondStart.dx, secondStart.dy, secondEnd.dx, secondEnd.dy);
+    path.lineTo(x, 0);
+    // path.lineTo(x, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    throw UnimplementedError();
   }
 }
