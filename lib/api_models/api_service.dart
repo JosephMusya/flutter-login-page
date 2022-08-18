@@ -13,7 +13,6 @@ class ApiService {
       }
     } catch (e) {
       print(e.toString());
-      print("Errorr.....");
     }
     return null;
   }
