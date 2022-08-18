@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:innovator/screen/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -118,7 +119,12 @@ class _LoginPageState extends State<LoginPage> {
               child: MaterialButton(
                 padding: const EdgeInsets.all(10),
                 minWidth: MediaQuery.of(context).size.width * 0.5,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
+                },
                 child: const Text(
                   "Login",
                   style: TextStyle(
