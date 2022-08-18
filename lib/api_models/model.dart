@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'dart:ffi';
+
 List<Model> modelFromJson(String str) =>
     List<Model>.from(json.decode(str).map((x) => Model.fromJson(x)));
 
@@ -18,6 +20,8 @@ class Model {
   String author;
   int quantity;
   String status;
+  double price;
+  bool trending;
   Model(
     this.id,
     this.coverImage,
@@ -26,6 +30,8 @@ class Model {
     this.author,
     this.quantity,
     this.status,
+    this.price,
+    this.trending,
   );
 
   factory Model.fromJson(Map<String, dynamic> json) => Model(
@@ -36,6 +42,8 @@ class Model {
         json["author"],
         json["quantity"],
         json["status"],
+        json["price"],
+        json["trending"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,5 +54,7 @@ class Model {
         "author": author,
         "quantity": quantity,
         "status": status,
+        "price": price,
+        "trending": trending,
       };
 }
