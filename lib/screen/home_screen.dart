@@ -10,7 +10,10 @@ class HomeScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Ebook'),
+          title: const Text(
+            'Ebook',
+            textAlign: TextAlign.end,
+          ),
         ),
         body: const BookView(),
       ),
@@ -27,6 +30,7 @@ class BookView extends StatefulWidget {
 
 class _BookViewState extends State<BookView> {
   late List<Model>? _model = [];
+  var _loading = true;
   @override
   void initState() {
     super.initState();
@@ -35,58 +39,80 @@ class _BookViewState extends State<BookView> {
 
   void _fetch() async {
     _model = (await ApiService.getBooks());
-    // Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+    _loading = false;
+    Future.delayed(const Duration(seconds: 3)).then((value) => setState(() {}));
     setState(() {
-      _model;
+      _loading;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     // return const Text("Youre home");
-    return ListView.builder(
-      itemCount: _model!.length,
-      // itemCount: 10,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Card(
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/cover/logo.png',
-                  fit: BoxFit.contain,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        title:
-                            const Text("Introduction to Django by William Joe"),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            Text(
-                              "In Stock",
-                              style: TextStyle(color: Colors.green),
+    return _loading
+        ? const Center(child: CircularProgressIndicator())
+        : ListView.builder(
+            itemCount: _model?.length,
+            // itemCount: 10,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Card(
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            child: Image.network(
+                              _model![index].coverImage.toString(),
+                              fit: BoxFit.contain,
                             ),
-                            Text("Ksh:899/="),
-                            Icon(
-                              Icons.shopping_cart,
-                              color: Colors.red,
-                            ),
-                            Icon(Icons.event_busy)
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                _model![index].title.toString() +
+                                    ' by ' +
+                                    _model![index].author.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    _model![index].status.toString(),
+                                    style: const TextStyle(color: Colors.green),
+                                  ),
+                                  // Text(_model![index].price.toString()),
+                                  const Icon(
+                                    Icons.shopping_cart,
+                                    color: Colors.red,
+                                  ),
+                                  Text('QTY: ' +
+                                      _model![index].quantity.toString()),
+                                  _model![index].trending
+                                      ? const Icon(Icons.star,
+                                          color: Colors.redAccent)
+                                      : const Text(''),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
   }
 }
