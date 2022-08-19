@@ -8,11 +8,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Ebook',
-            textAlign: TextAlign.end,
+          title: const Center(
+            child: Text(
+              'Ebook',
+              textAlign: TextAlign.end,
+            ),
           ),
         ),
         body: const BookView(),
@@ -29,7 +32,7 @@ class BookView extends StatefulWidget {
 }
 
 class _BookViewState extends State<BookView> {
-  late List<Model>? _model = [];
+  late List<Model> _model = [];
   var _loading = true;
   @override
   void initState() {
@@ -38,9 +41,10 @@ class _BookViewState extends State<BookView> {
   }
 
   void _fetch() async {
+    _loading = true;
     _model = (await ApiService.getBooks());
     _loading = false;
-    Future.delayed(const Duration(seconds: 3)).then((value) => setState(() {}));
+    // Future.delayed(const Duration(seconds: 3)).then((value) => setState(() {}));
     setState(() {
       _loading;
     });
@@ -51,68 +55,103 @@ class _BookViewState extends State<BookView> {
     // return const Text("Youre home");
     return _loading
         ? const Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            itemCount: _model?.length,
-            // itemCount: 10,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Card(
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          SizedBox(
-                            height: 200,
-                            child: Image.network(
-                              _model![index].coverImage.toString(),
-                              fit: BoxFit.contain,
+        : _model.isEmpty
+            ? Center(
+                child: Material(
+                  elevation: 8,
+                  child: Stack(
+                      // clipBehavior: Clip.none,
+                      // padding: const EdgeInsets.all(10.0),
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(25, 2, 25, 30),
+                          child: Text(
+                            "Error Occurred",
+                            style:
+                                TextStyle(color: Colors.red[400], fontSize: 17),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 1,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _loading = true;
+                              });
+                              _fetch();
+                            },
+                            child: const Icon(
+                              Icons.refresh,
                             ),
                           ),
-                        ],
-                      ),
-                      Row(
+                        )
+                      ]),
+                ),
+              )
+            : ListView.builder(
+                itemCount: _model.length,
+                // itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Card(
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: ListTile(
-                              title: Text(
-                                _model![index].title.toString() +
-                                    ' by ' +
-                                    _model![index].author.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
+                          Stack(
+                            children: [
+                              SizedBox(
+                                height: 200,
+                                child: Image.network(
+                                  _model[index].coverImage.toString(),
+                                  fit: BoxFit.contain,
                                 ),
                               ),
-                              subtitle: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    _model![index].status.toString(),
-                                    style: const TextStyle(color: Colors.green),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ListTile(
+                                  title: Text(
+                                    _model[index].title.toString() +
+                                        ' by ' +
+                                        _model[index].author.toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  // Text(_model![index].price.toString()),
-                                  const Icon(
-                                    Icons.shopping_cart,
-                                    color: Colors.red,
+                                  subtitle: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                        _model[index].status.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.green),
+                                      ),
+                                      // Text(_model![index].price.toString()),
+                                      const Icon(
+                                        Icons.download,
+                                        color: Colors.grey,
+                                      ),
+                                      Text('QTY: ' +
+                                          _model[index].quantity.toString()),
+                                      _model[index].trending
+                                          ? const Icon(Icons.star,
+                                              color: Colors.redAccent)
+                                          : const Text(''),
+                                    ],
                                   ),
-                                  Text('QTY: ' +
-                                      _model![index].quantity.toString()),
-                                  _model![index].trending
-                                      ? const Icon(Icons.star,
-                                          color: Colors.redAccent)
-                                      : const Text(''),
-                                ],
-                              ),
-                            ),
+                                ),
+                              )
+                            ],
                           )
                         ],
-                      )
-                    ],
-                  ),
-                ),
+                      ),
+                    ),
+                  );
+                },
               );
-            },
-          );
   }
 }
