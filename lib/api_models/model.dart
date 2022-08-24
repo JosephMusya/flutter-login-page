@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 
-import 'dart:ffi';
 
 List<Model> modelFromJson(String str) =>
     List<Model>.from(json.decode(str).map((x) => Model.fromJson(x)));
