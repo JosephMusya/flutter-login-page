@@ -1,3 +1,3 @@
-# Custom resuable template
+# Login Tempate
 
-Custom Login Template for flutter mobile application 
+Login Template for flutter mobile application 
